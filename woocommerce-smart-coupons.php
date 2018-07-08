@@ -16,7 +16,7 @@
  * Plugin Name:       Woocommerce Smart Coupons
  * Plugin URI:        https://cyber5.net/wp-plugins/woocommerce-smart-coupons
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Leni Neto
  * Author URI:        https://lenineto.com/
  * License:           GPL-2.0+
