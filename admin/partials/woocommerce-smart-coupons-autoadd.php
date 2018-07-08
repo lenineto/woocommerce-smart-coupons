@@ -9,10 +9,16 @@
 <div id="smart_coupon_options" class="panel woocommerce_options_panel">
     <?php
         woocommerce_wp_checkbox( array(
+        'id' => 'c5_auto_empty_cart',
+        'name' => 'c5_auto_empty_cart',
+        'label' => __( 'Empty cart?', 'woocommerce-smart-coupons' ),
+        'description' => __( 'Check this option if you wish the cart to be emptied before auto-adding the products and applying the coupon', 'woocommerce')
+    ) );
+
+        woocommerce_wp_checkbox( array(
             'id' => 'c5_auto_add_product_enable',
             'name' => 'c5_auto_add_product_enable',
             'label' => __( 'Auto add products?', 'woocommerce-smart-coupons' ),
-            'cbvalue' => $autoadd_checked,
             'description' => __( 'Check this option if you wish this coupon to automatically add products to the cart', 'woocommerce')
         ) );
 

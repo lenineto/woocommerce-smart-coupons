@@ -113,9 +113,13 @@ class Woocommerce_Smart_Coupons_Public {
             if (sizeof($coupons) > 2) {
                 foreach ($coupons as $coupon) {
                     if ($coupon !== '' && $coupon !== $coupon_url) {
+                        $coupon_id = wc_get_coupon_id_by_code($coupon);
 
                         if ($coupon !== '###LAST###') {
-                            $coupon_id = wc_get_coupon_id_by_code($coupon);
+                            /** check if the coupon should empty the cart */
+                            if (get_post_meta($coupon_id, 'c5_auto_empty_cart', true) == 'yes')
+                                WC()->cart->empty_cart();
+
                             /** check if we should add products */
                             if (get_post_meta($coupon_id, 'c5_auto_add_product_enable', true) == 'yes' ) {
                                 /** retrieve the products list */
@@ -127,20 +131,27 @@ class Woocommerce_Smart_Coupons_Public {
                                     }
                                 }
                             }
-                            /** apply the coupon if it has not been applied yet*/
-                            $coupon_found = false;
-                            if (sizeof(WC()->cart->get_applied_coupons()) > 0) {
-                                foreach (WC()->cart->get_applied_coupons() as $_coupon){
-                                    if ($coupon == $_coupon)
-                                        $coupon_found = true;
-                                }
-                                if (!$coupon_found)
-                                    /** not applied yet, let's apply it */
+                            /** only apply coupons with discount different than ZERO */
+                            $coupon_in_use = new WC_Coupon($coupon_id);
+                            if ($coupon_in_use->get_amount() > 0) {
+                                /** apply the coupon if it has not been applied yet*/
+                                $coupon_found = false;
+                                if (sizeof(WC()->cart->get_applied_coupons()) > 0) {
+                                    foreach (WC()->cart->get_applied_coupons() as $_coupon){
+                                        if ($coupon == $_coupon)
+                                            $coupon_found = true;
+                                    }
+                                    if (!$coupon_found)
+                                        /** not applied yet, let's apply it */
+                                        WC()->cart->apply_coupon($coupon);
+                                } else {
+                                    /** there are no coupons applied yet, so its safe to apply it */
                                     WC()->cart->apply_coupon($coupon);
-                            } else {
-                                /** there are no coupons applied yet, so its safe to apply it */
-                                WC()->cart->apply_coupon($coupon);
+                                }
                             }
+
+
+
                         } else {
                             /** this was the last coupon, so let's redirect */
                             $redirect_type = get_post_meta($coupon_id, 'c5_coupon_redirect', true);

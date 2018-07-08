@@ -133,7 +133,10 @@ class Woocommerce_Smart_Coupons_Admin {
     public function woocommerce_coupon_data_panels() {
         global $thepostid;
 
-        $autoadd_checked = get_post_meta($thepostid, 'c5_auto_add_product_enable', true);
+        //$autoempty_value = get_post_meta($thepostid, 'c5_auto_empty_cart', true);
+        //$autoempty_checked = ($autoempty_value == 'yes') ? 'yes' : '';
+        //$autoadd_value = get_post_meta($thepostid, 'c5_auto_add_product_enable', true);
+        //$autoadd_checked = ($autoempty_value == 'yes') ? 'yes' : '';
         $selected_products = get_post_meta($thepostid, 'c5_coupon_autoadd_products', true);
         $redirect_type = get_post_meta($thepostid, 'c5_coupon_redirect', true);
         if ($redirect_type == 'custom')
@@ -162,12 +165,14 @@ class Woocommerce_Smart_Coupons_Admin {
     }
 
     public function woocommerce_coupon_options_save($post_id = null) {
-	    $auto_add_enabled = isset($_POST['c5_auto_add_product_enable']) ? 'yes' : 'no';
+	    $auto_empty_cart = isset($_POST['c5_auto_empty_cart']) ? $_POST['c5_auto_empty_cart'] : 'no';
+        $auto_add_enabled = isset($_POST['c5_auto_add_product_enable']) ? $_POST['c5_auto_add_product_enable'] : 'no';
 	    $product_list = isset($_POST['c5_coupon_autoadd_products']) ? $_POST['c5_coupon_autoadd_products'] : '';
 	    $redirect_type = isset($_POST['c5_coupon_redirect']) ? $_POST['c5_coupon_redirect'] : 'cart';
 	    $redirect_url = isset($_POST['c5_coupon_redirect_url']) ? $_POST['c5_coupon_redirect_url'] : '';
 
-	    update_post_meta($post_id, 'c5_auto_add_product_enable', $auto_add_enabled);
+	    update_post_meta($post_id, 'c5_auto_empty_cart', $auto_empty_cart);
+        update_post_meta($post_id, 'c5_auto_add_product_enable', $auto_add_enabled);
 	    update_post_meta($post_id, 'c5_coupon_autoadd_products', $product_list);
 	    update_post_meta($post_id, 'c5_coupon_redirect', $redirect_type);
 	    update_post_meta($post_id, 'c5_coupon_redirect_url', $redirect_url);
