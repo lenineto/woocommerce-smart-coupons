@@ -113,9 +113,10 @@ class Woocommerce_Smart_Coupons_Public {
             if (sizeof($coupons) > 2) {
                 foreach ($coupons as $coupon) {
                     if ($coupon !== '' && $coupon !== $coupon_url) {
-                        $coupon_id = wc_get_coupon_id_by_code($coupon);
+
 
                         if ($coupon !== '###LAST###') {
+                            $coupon_id = wc_get_coupon_id_by_code($coupon);
                             /** check if the coupon should empty the cart */
                             if (get_post_meta($coupon_id, 'c5_auto_empty_cart', true) == 'yes')
                                 WC()->cart->empty_cart();
